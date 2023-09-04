@@ -25,11 +25,11 @@ percent = despesas / salario
 print('Percentual do salário (R${:.2f}) comprometido pelas despesas ({:.2f}) é: {:.2f}'.format(salario, despesas, percent))
 
 # 4
-# print('#### Exercício 4')
-# x = float(input("Digite um número: "))
-# y = float(input("Digite um número: "))
+print('#### Exercício 4')
+x = float(input("Digite um número: "))
+y = float(input("Digite um número: "))
 
-# print(f'{x} + {y} = {x+y}')
+print(f'{x} + {y} = {x+y}')
 
 # 5
 print('#### Exercício 5')
@@ -48,15 +48,15 @@ for n in nomes:
     print(n)
 
 # 7
-# print('#### Exercício 7')
-# from random import randint
+print('#### Exercício 7')
+from random import randint
 
-# n = randint(0, 9)
+n = randint(0, 9)
 
-# chute = int(input("Digite um número de 0 a 9: "))
+chute = int(input("Digite um número de 0 a 9: "))
 
-# if chute == n:
-#     print(f"Número secreto {n} foi encontrado!")
+if chute == n:
+    print(f"Número secreto {n} foi encontrado!")
 
 # 8
 print('#### Exercício 8')
