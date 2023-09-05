@@ -96,12 +96,7 @@ while alive:
     if len(usr_input) > 1:
         obj = usr_input[1]
 
-    if cmd == "exit":
-        print(exit_msg)
-        alive = False
-    elif cmd == "help":
-        print(help_msg)
-    elif cmd == "create":
+    if cmd == "create":
         if obj == "author":
             name = input("Digite o nome do autor: ")
             cursor.execute(sql_create_author,[name])
@@ -133,24 +128,43 @@ while alive:
                 print(f"{row[0]} - {row[1]} - {row[2]} - {row[3]}")
         else:
             print(f"Objeto `{obj}` desconhecido!")
-    # elif cmd == "update":
-    #     if obj == "author":
-    #         id = input("Digite o ID do autor")
-    #         name = input("Digite o novo nome do autor: ")
-    #         cursor.execute(sql_update_author, [name, id])
-    #         con.commit()
+    elif cmd == "update":
+        if obj == "author":
+            id = input("Digite o ID do autor: ")
+            name = input("Digite o novo nome do autor: ")
+            cursor.execute(sql_update_author, [name, id])
+            con.commit()
 
-    #         print(f"Autor `{id}` atualizado com sucesso")
-    #     elif obj == "post":
-    #         id = input("Digite o ID do post: ")
-    #         title = input("Digite o novo título do post: ")
-    #         cursor.execute(sql_update_post, [title, id])
-    #         con.commit()
+            print(f"Autor `{id}` atualizado com sucesso")
+        elif obj == "post":
+            id = input("Digite o ID do post: ")
+            title = input("Digite o novo título do post: ")
+            cursor.execute(sql_update_post, [title, id])
+            con.commit()
 
-    #         print(f"Autor `{id}` atualizado com sucesso")
-    #     else:
-    #         print("Objeto `", obj, "` desconhecido!")
-    # elif cmd == "delete":
+            print(f"Post `{id}` atualizado com sucesso")
+        else:
+            print("Objeto `", obj, "` desconhecido!")
+    elif cmd == "delete":
+        if obj == "author":
+            id = input("Digite o ID do autor: ")
+            cursor.execute(sql_delete_author, [id])
+            con.commit()
+
+            print(f"Autor `{id}` deletado com sucesso")
+        elif obj == "post":
+            id = input("Digite o ID do post: ")
+            cursor.execute(sql_delete_post, [id])
+            con.commit()
+
+            print(f"Post `{id}` deletado com sucesso")
+        else:
+            print("Objeto `", obj, "` desconhecido!")
+    elif cmd == "exit":
+        print(exit_msg)
+        alive = False
+    elif cmd == "help":
+        print(help_msg)
     else:
         print(f"Comando `{cmd}` desconhecido!")
         print(welcome_msg)
