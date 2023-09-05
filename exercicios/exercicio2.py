@@ -35,7 +35,7 @@ insert into author (name) values (%s);
 """
 
 sql_create_post = """
-insert into author (id_author, title, created) values (%s, %s, '%s');
+insert into post (id_author, title, created) values (%s, %s, %s);
 """
 
 sql_update_author = """
@@ -50,7 +50,7 @@ sql_delete_author = """
 delete from author where id = %s;
 """
 
-sql_update_post = """
+sql_delete_post = """
 delete from post where id = %s;
 """
 
@@ -65,24 +65,92 @@ help_msg = """Para efetuar uma operação digite `[COMANDO] [OBJETO]`, onde:
 - Valores possíveis de `[OBJETO]`:
     - `author`: operar com objetos autores
     - `post`: operar com objetos posts de autores
-Posts podem ser buscados também pelo ID do autor com o comando `select_by_author`
-"""
+
+Posts podem ser buscados também pelo ID do autor com o comando `select_by_author`"""
 
 exit_msg = "Finalizando..."
 
 welcome_msg = "Digite `help` para listar os comandos disponíveis ou `exit` para sair"
 
-###### SHELL #######
+###### SHELL SETUP #######
 alive = True
+
+con = mysql.connector.connect(host='localhost', database='blog', user='root', password='root')
+# Run `create database if not exists blog`
+
+cursor = con.cursor()
+
+cursor.execute(sql_author_table)
+cursor.execute(sql_post_table)
+con.commit()
 
 print(welcome_msg)
 
+###### SHELL LOOP #######
+
 while alive:
-    cmd = input('> ')
+    usr_input = input('> ').split(" ")
+    
+    cmd = usr_input[0]
+    obj = ""
+    if len(usr_input) > 1:
+        obj = usr_input[1]
+
     if cmd == "exit":
         print(exit_msg)
         alive = False
     elif cmd == "help":
         print(help_msg)
+    elif cmd == "create":
+        if obj == "author":
+            name = input("Digite o nome do autor: ")
+            cursor.execute(sql_create_author,[name])
+            con.commit()
+
+            print(f"Autor `{name}` criado com sucesso")
+        elif obj == "post":
+            author_id = input("Digite o ID do autor: ")
+            title = input("Digite o título do post: ")
+            created = datetime.now()
+            cursor.execute(sql_create_post, [author_id, title, created])
+            con.commit()
+
+            print(f"Post `{title}` criado com sucesso")
+        else:
+            print("Objeto `", obj, "` desconhecido!")
+    elif cmd == "select":
+        if obj == "author":
+            cursor.execute(sql_select_author)
+
+            print("ID - Nome")
+            for row in cursor.fetchall():
+                print(f"{row[0]} - {row[1]}")
+        elif obj == "post":
+            cursor.execute(sql_select_post)
+            
+            print("ID - ID Autor - Titulo - Data criacao")
+            for row in cursor.fetchall():
+                print(f"{row[0]} - {row[1]} - {row[2]} - {row[3]}")
+        else:
+            print(f"Objeto `{obj}` desconhecido!")
+    # elif cmd == "update":
+    #     if obj == "author":
+    #         id = input("Digite o ID do autor")
+    #         name = input("Digite o novo nome do autor: ")
+    #         cursor.execute(sql_update_author, [name, id])
+    #         con.commit()
+
+    #         print(f"Autor `{id}` atualizado com sucesso")
+    #     elif obj == "post":
+    #         id = input("Digite o ID do post: ")
+    #         title = input("Digite o novo título do post: ")
+    #         cursor.execute(sql_update_post, [title, id])
+    #         con.commit()
+
+    #         print(f"Autor `{id}` atualizado com sucesso")
+    #     else:
+    #         print("Objeto `", obj, "` desconhecido!")
+    # elif cmd == "delete":
     else:
-        print("COMANDO DESCONHECIDO")
+        print(f"Comando `{cmd}` desconhecido!")
+        print(welcome_msg)
