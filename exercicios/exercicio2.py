@@ -128,6 +128,16 @@ while alive:
                 print(f"{row[0]} - {row[1]} - {row[2]} - {row[3]}")
         else:
             print(f"Objeto `{obj}` desconhecido!")
+    elif cmd == "select_by_author":
+        if obj == "post":
+            id = input("Digite o ID do autor: ")
+            cursor.execute(sql_select_post_author_id, [id])
+            
+            print("ID - ID Autor - Titulo - Data criacao")
+            for row in cursor.fetchall():
+                print(f"{row[0]} - {row[1]} - {row[2]} - {row[3]}")
+        else:
+            print(f"Objeto `{obj}` desconhecido!")
     elif cmd == "update":
         if obj == "author":
             id = input("Digite o ID do autor: ")
