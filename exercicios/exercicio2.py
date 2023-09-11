@@ -66,7 +66,9 @@ help_msg = """Para efetuar uma operação digite `[COMANDO] [OBJETO]`, onde:
     - `author`: operar com objetos autores
     - `post`: operar com objetos posts de autores
 
-Posts podem ser buscados também pelo ID do autor com o comando `select_by_author`"""
+Posts podem ser buscados também pelo ID do autor com o comando `select_by_autho post`
+Seleção autores com seus posts pode ser feita com `select_detailed author`
+"""
 
 exit_msg = "Finalizando..."
 
@@ -168,6 +170,20 @@ while alive:
             con.commit()
 
             print(f"Post `{id}` deletado com sucesso")
+        else:
+            print("Objeto `", obj, "` desconhecido!")
+    elif cmd == "select_detailed":
+        if obj == 'author':
+            cursor.execute(sql_select_author)
+
+            authors = cursor.fetchall()
+
+            for author_row in authors:
+                print(f"### Posts de \"{author_row[1]}\" (ID: {author_row[0]})")
+                cursor.execute(sql_select_post_author_id, [author_row[0]])
+                author_posts = cursor.fetchall()
+                for post_row in author_posts:
+                    print(f"- \"{post_row[2]}\", criado em {post_row[3]} (ID: {post_row[0]})")
         else:
             print("Objeto `", obj, "` desconhecido!")
     elif cmd == "exit":
