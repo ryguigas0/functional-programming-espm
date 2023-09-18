@@ -18,7 +18,8 @@ create table if not exists student(
     name varchar(80),
     created datetime,
     age int,
-    cpf varchar(11)
+    cpf varchar(11),
+    foreign key (course_id) references course (course_id) on delete cascade
 );
 """
 
@@ -126,9 +127,9 @@ while alive:
         if obj == "course":
             cursor.execute(sql_select_course)
 
-            print("ID - Nome")
+            print("ID - Nome - Área de estudo")
             for row in cursor.fetchall():
-                print(f"{row[0]} - {row[1]}")
+                print(f"{row[0]} - {row[1]} - {row[2]}")
         elif obj == "student":
             cursor.execute(sql_select_student)
             
